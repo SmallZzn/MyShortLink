@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhao.shortlink.project.dao.mapper.ShortLinkMapper">
+    <!-- 分页查询短链接 -->
+    <select id="pageLink" parameterType="com.zhao.shortlink.project.dto.req.ShortLinkPageReqDTO"
+            resultType="com.zhao.shortlink.project.dao.entity.ShortLinkDO">
+        SELECT t.*,
+        COALESCE(s.today_pv, 0) AS todayPv,
+        COALESCE(s.today_uv, 0) AS todayUv,
+        COALESCE(s.today_uip, 0) AS todayUip
+        FROM t_link t
+        LEFT JOIN t_link_stats_today s ON t.gid = s.gid
+        AND t.full_short_url = s.full_short_url
+        AND s.date = CURDATE()
+        WHERE t.enable_status = 0
+        AND t.del_flag = 0
+        AND t.gid = #{gid}
+        <if test="likeShortLink != null and likeShortLink != ''">
+            AND (t.full_short_url LIKE CONCAT('%', #{likeShortLink}, '%')
+            OR t.origin_url LIKE CONCAT('%', #{likeShortLink}, '%')
+            OR t.`describe` LIKE CONCAT('%', #{likeShortLink}, '%'))
+        </if>
+        <choose>
+            <when test="orderTag == 'todayPv'">
+                ORDER BY todayPv DESC
+            </when>
+            <when test="orderTag == 'todayUv'">
+                ORDER BY todayUv DESC
+            </when>
+            <when test="orderTag == 'todayUip'">
+                ORDER BY todayUip DESC
+            </when>
+            <when test="orderTag == 'totalPv'">
+                ORDER BY t.total_pv DESC
+            </when>
+            <when test="orderTag == 'totalUv'">
+                ORDER BY t.total_uv DESC
+            </when>
+            <when test="orderTag == 'totalUip'">
+                ORDER BY t.total_uip DESC
+            </when>
+            <otherwise>
+                ORDER BY t.create_time DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <!-- 分页查询短链接 -->
+    <select id="getManagerShortLink" parameterType="com.zhao.shortlink.project.dto.req.ManagerToUserDTO"
+            resultType="com.zhao.shortlink.project.dao.entity.ShortLinkDO">
+        SELECT t.*,
+        COALESCE(s.today_pv, 0) AS todayPv,
+        COALESCE(s.today_uv, 0) AS todayUv,
+        COALESCE(s.today_uip, 0) AS todayUip
+        FROM t_link t
+        LEFT JOIN t_link_stats_today s ON t.gid = s.gid
+        AND t.full_short_url = s.full_short_url
+        AND s.date = CURDATE()
+        WHERE t.enable_status = 0
+        AND t.del_flag = 0
+        AND t.gid IN
+        <foreach collection="gidList" item="gid" open="(" close=")" separator=",">
+            #{gid}
+        </foreach>
+        <!--        <if test="likeShortLink != null and likeShortLink != ''">-->
+        <!--            AND (t.full_short_url LIKE CONCAT('%', #{likeShortLink}, '%')-->
+        <!--            OR t.origin_url LIKE CONCAT('%', #{likeShortLink}, '%')-->
+        <!--            OR t.`describe` LIKE CONCAT('%', #{likeShortLink}, '%'))-->
+        <!--        </if>-->
+        <choose>
+            <when test="orderTag == 'todayPv'">
+                ORDER BY todayPv DESC
+            </when>
+            <when test="orderTag == 'todayUv'">
+                ORDER BY todayUv DESC
+            </when>
+            <when test="orderTag == 'todayUip'">
+                ORDER BY todayUip DESC
+            </when>
+            <when test="orderTag == 'totalPv'">
+                ORDER BY t.total_pv DESC
+            </when>
+            <when test="orderTag == 'totalUv'">
+                ORDER BY t.total_uv DESC
+            </when>
+            <when test="orderTag == 'totalUip'">
+                ORDER BY t.total_uip DESC
+            </when>
+            <otherwise>
+                ORDER BY t.create_time DESC
+            </otherwise>
+        </choose>
+    </select>
+</mapper>

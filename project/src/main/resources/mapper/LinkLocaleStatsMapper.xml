@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhao.shortlink.project.dao.mapper.LinkLocaleStatsMapper">
+    <select id="listLocaleByGidList" parameterType="com.zhao.shortlink.project.dto.req.ShortLinkStatsReqDTO"
+            resultType="com.zhao.shortlink.project.dao.entity.LinkLocaleStatsDO">
+        SELECT
+        province,
+        SUM(cnt) AS cnt
+        FROM
+        t_link_locale_stats
+        WHERE gid IN
+        <foreach collection='param.gidList' item='gid' open='(' separator=',' close=')'>
+            #{gid}
+        </foreach>
+        AND date BETWEEN #{param.startDate} and #{param.endDate}
+        GROUP BY province;
+    </select>
+</mapper>

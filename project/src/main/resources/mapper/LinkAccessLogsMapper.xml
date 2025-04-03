@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhao.shortlink.project.dao.mapper.LinkAccessLogsMapper">
+    <select id="findPvUvUidStatsByGidList" parameterType="com.zhao.shortlink.project.dto.req.ShortLinkStatsReqDTO"
+            resultType="com.zhao.shortlink.project.dao.entity.LinkAccessStatsDO">
+        SELECT
+        COUNT(user) AS pv,
+        COUNT(DISTINCT user) AS uv,
+        COUNT(DISTINCT ip) AS uip
+        FROM
+        t_link_access_logs
+        WHERE
+        gid IN
+        <foreach collection='param.gidList' item='gid' open='(' separator=',' close=')'>
+            #{gid}
+        </foreach>
+        AND create_time BETWEEN #{param.startDate} and #{param.endDate}
+        GROUP BY gid;
+    </select>
+
+    <select id="listTopIpByGidList" parameterType="com.zhao.shortlink.project.dto.req.ShortLinkStatsReqDTO"
+            resultType="hashmap">
+        SELECT
+        ip,
+        COUNT(ip) AS `count`
+        FROM
+        t_link_access_logs
+        WHERE
+        gid IN
+        <foreach collection='param.gidList' item='gid' open='(' separator=',' close=')'>
+            #{gid}
+        </foreach>
+        AND create_time BETWEEN #{param.startDate} and #{param.endDate}
+        GROUP BY ip
+        ORDER BY `count` DESC
+        LIMIT 5;
+    </select>
+
+    <select id="findUvTypeCntByGidList" parameterType="com.zhao.shortlink.project.dto.req.ShortLinkStatsReqDTO"
+            resultType="hashmap">
+        SELECT
+        SUM(old_user) AS oldUserCnt,
+        SUM(new_user) AS newUserCnt
+        FROM (
+        SELECT
+        CASE WHEN COUNT(DISTINCT DATE(create_time)) > 1 THEN 1 ELSE 0 END AS old_user,
+        CASE WHEN COUNT(DISTINCT DATE(create_time)) = 1 AND MAX(create_time) >= #{param.startDate} AND MAX(create_time)
+        = #{param.endDate} THEN 1 ELSE 0 END AS new_user
+        FROM
+        t_link_access_logs
+        WHERE
+        gid IN
+        <foreach collection='param.gidList' item='gid' open='(' separator=',' close=')'>
+            #{gid}
+        </foreach>
+        GROUP BY user
+        ) AS user_counts;
+    </select>
+</mapper>
