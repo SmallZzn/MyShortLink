@@ -5,8 +5,8 @@ package com.zhao.shortlink.admin.controller;
 import cn.hutool.core.bean.BeanUtil;
 import com.zhao.shortlink.admin.common.convention.result.Result;
 import com.zhao.shortlink.admin.common.convention.result.Results;
-import com.zhao.shortlink.admin.dto.req.UserDTO;
 import com.zhao.shortlink.admin.dto.req.UserLoginReqDTO;
+import com.zhao.shortlink.admin.dto.req.UserReqDTO;
 import com.zhao.shortlink.admin.dto.req.UserRegisterReqDTO;
 import com.zhao.shortlink.admin.dto.req.UserUpdateReqDTO;
 import com.zhao.shortlink.admin.dto.resp.UserActualRespDTO;
@@ -98,7 +98,7 @@ public class UserController {
      * 检查旧密码是否正确
      */
     @PostMapping("/short-link/admin/v1/checkPassword")
-    public Result<Boolean> checkPassword(@RequestBody UserDTO userDTO) {
+    public Result<Boolean> checkPassword(@RequestBody UserReqDTO userDTO) {
         return Results.success(userService.checkPassword(userDTO));
     }
 }

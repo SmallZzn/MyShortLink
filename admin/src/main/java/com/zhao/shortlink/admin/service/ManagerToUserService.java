@@ -8,8 +8,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.zhao.shortlink.admin.common.convention.result.Result;
 import com.zhao.shortlink.admin.dao.entity.ManagerToUserDO;
 import com.zhao.shortlink.admin.dao.entity.UserDO;
-import com.zhao.shortlink.admin.dto.req.ManagerToUserDTO;
-import com.zhao.shortlink.admin.dto.req.UserDTO;
+import com.zhao.shortlink.admin.dto.req.ManagerToUserReqDTO;
+import com.zhao.shortlink.admin.dto.req.UserReqDTO;
 import com.zhao.shortlink.admin.dto.resp.ManagerToUserRespDTO;
 import com.zhao.shortlink.admin.remote.dto.req.ShortLinkStatsAccessRecordReqDTO;
 import com.zhao.shortlink.admin.remote.dto.req.ShortLinkStatsReqDTO;
@@ -70,14 +70,14 @@ public interface ManagerToUserService extends IService<ManagerToUserDO> {
      * @param managerToUserDTO
      * @return
      */
-    ManagerToUserRespDTO getAssignedList(ManagerToUserDTO managerToUserDTO);
+    ManagerToUserRespDTO getAssignedList(ManagerToUserReqDTO managerToUserDTO);
 
     /**
      * 查看管理员管理的短链接
      *
      * @param managerToUserDTO
      */
-    Result<Page<ShortLinkPageRespDTO>> getManagerShortLink(ManagerToUserDTO managerToUserDTO);
+    Result<Page<ShortLinkPageRespDTO>> getManagerShortLink(ManagerToUserReqDTO managerToUserDTO);
 
     /**
      * 删除管理员与用户关联关系
@@ -91,7 +91,7 @@ public interface ManagerToUserService extends IService<ManagerToUserDO> {
      * @param userDTO
      * @return
      */
-    IPage<UserDO> pageUserList(UserDTO userDTO);
+    IPage<UserDO> pageUserList(UserReqDTO userDTO);
 
     /**
      * 查看用某一用户指定时间内访问信息

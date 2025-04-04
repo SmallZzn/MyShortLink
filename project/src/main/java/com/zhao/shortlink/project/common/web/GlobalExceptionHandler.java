@@ -5,7 +5,7 @@ package com.zhao.shortlink.project.common.web;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.zhao.shortlink.project.common.convention.errorcode.BaseErrorCode;
-import com.zhao.shortlink.project.common.convention.exception.AbstractException;
+import com.zhao.shortlink.project.common.convention.exception.BaseException;
 import com.zhao.shortlink.project.common.convention.result.Result;
 import com.zhao.shortlink.project.common.convention.result.Results;
 import jakarta.servlet.http.HttpServletRequest;
@@ -48,8 +48,8 @@ public class GlobalExceptionHandler {
     /**
      * 拦截应用内抛出的异常
      */
-    @ExceptionHandler(value = {AbstractException.class})
-    public Result abstractException(HttpServletRequest request, AbstractException ex) {
+    @ExceptionHandler(value = {BaseException.class})
+    public Result baseException(HttpServletRequest request, BaseException ex) {
         if (ex.getCause() != null) {
             log.error("[{}] {} [ex] {}", request.getMethod(), request.getRequestURL().toString(), ex.toString(), ex.getCause());
             return Results.failure(ex);

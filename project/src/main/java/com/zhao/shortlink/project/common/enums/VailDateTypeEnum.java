@@ -1,5 +1,3 @@
-
-
 package com.zhao.shortlink.project.common.enums;
 
 import lombok.Getter;

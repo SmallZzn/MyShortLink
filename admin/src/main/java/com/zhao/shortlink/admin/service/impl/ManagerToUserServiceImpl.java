@@ -16,8 +16,8 @@ import com.zhao.shortlink.admin.dao.entity.ManagerDO;
 import com.zhao.shortlink.admin.dao.entity.ManagerToUserDO;
 import com.zhao.shortlink.admin.dao.entity.UserDO;
 import com.zhao.shortlink.admin.dao.mapper.ManagerToUserMapper;
-import com.zhao.shortlink.admin.dto.req.ManagerToUserDTO;
-import com.zhao.shortlink.admin.dto.req.UserDTO;
+import com.zhao.shortlink.admin.dto.req.ManagerToUserReqDTO;
+import com.zhao.shortlink.admin.dto.req.UserReqDTO;
 import com.zhao.shortlink.admin.dto.resp.ManagerToUserRespDTO;
 import com.zhao.shortlink.admin.remote.ShortLinkActualRemoteService;
 import com.zhao.shortlink.admin.remote.dto.req.ShortLinkStatsAccessRecordReqDTO;
@@ -110,7 +110,7 @@ public class ManagerToUserServiceImpl extends ServiceImpl<ManagerToUserMapper, M
     }
 
     @Override
-    public ManagerToUserRespDTO getAssignedList(ManagerToUserDTO managerToUserDTO) {
+    public ManagerToUserRespDTO getAssignedList(ManagerToUserReqDTO managerToUserDTO) {
         //查找已分配的列表
         LambdaQueryWrapper<ManagerToUserDO> queryWrapper1 = new LambdaQueryWrapper<>();
         queryWrapper1.eq(StrUtil.isNotBlank(managerToUserDTO.getManagerName()), ManagerToUserDO::getManagerName, managerToUserDTO.getManagerName());
@@ -148,7 +148,7 @@ public class ManagerToUserServiceImpl extends ServiceImpl<ManagerToUserMapper, M
     }
 
     @Override
-    public Result<Page<ShortLinkPageRespDTO>> getManagerShortLink(ManagerToUserDTO managerToUserDTO) {
+    public Result<Page<ShortLinkPageRespDTO>> getManagerShortLink(ManagerToUserReqDTO managerToUserDTO) {
         List<String> groupIds = getGidListByUsername(managerToUserDTO.getUsername());
 
         managerToUserDTO.setGidList(groupIds);
@@ -165,7 +165,7 @@ public class ManagerToUserServiceImpl extends ServiceImpl<ManagerToUserMapper, M
     }
 
     @Override
-    public IPage<UserDO> pageUserList(UserDTO requestParam) {
+    public IPage<UserDO> pageUserList(UserReqDTO requestParam) {
         //查找管理员信息
         ManagerDO manager = managerService.getManagerByUsername(requestParam.getManagerName());
 

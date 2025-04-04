@@ -5,7 +5,7 @@ package com.zhao.shortlink.project.dao.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.zhao.shortlink.project.dao.entity.ShortLinkDO;
-import com.zhao.shortlink.project.dto.req.ManagerToUserDTO;
+import com.zhao.shortlink.project.dto.req.ManagerToReqDTO;
 import com.zhao.shortlink.project.dto.req.ShortLinkPageReqDTO;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Update;
@@ -38,5 +38,5 @@ public interface ShortLinkMapper extends BaseMapper<ShortLinkDO> {
      * @param requestParam
      * @return
      */
-    IPage<ShortLinkDO> getManagerShortLink(ManagerToUserDTO requestParam);
+    IPage<ShortLinkDO> getManagerShortLink(ManagerToReqDTO requestParam);
 }

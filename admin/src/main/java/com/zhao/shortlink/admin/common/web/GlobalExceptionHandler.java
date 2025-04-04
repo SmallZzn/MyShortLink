@@ -6,7 +6,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.zhao.shortlink.admin.common.convention.errorcode.BaseErrorCode;
-import com.zhao.shortlink.admin.common.convention.exception.AbstractException;
+import com.zhao.shortlink.admin.common.convention.exception.BaseException;
 import com.zhao.shortlink.admin.common.convention.result.Result;
 import com.zhao.shortlink.admin.common.convention.result.Results;
 import jakarta.servlet.http.HttpServletRequest;
@@ -50,8 +50,8 @@ public class GlobalExceptionHandler {
     /**
      * 拦截应用内抛出的异常
      */
-    @ExceptionHandler(value = {AbstractException.class})
-    public Result abstractException(HttpServletRequest request, AbstractException ex) {
+    @ExceptionHandler(value = {BaseException.class})
+    public Result baseException(HttpServletRequest request, BaseException ex) {
         if (ex.getCause() != null) {
             log.error("[{}] {} [ex] {}", request.getMethod(), request.getRequestURL().toString(), ex.toString(), ex.getCause());
             return Results.failure(ex);
@@ -67,7 +67,7 @@ public class GlobalExceptionHandler {
     public Result defaultErrorHandler(HttpServletRequest request, Throwable throwable) {
         log.error("[{}] {} ", request.getMethod(), getUrl(request), throwable);
         // 注意，此处是为了聚合模式添加的代码，正常不需要该判断
-        if (Objects.equals(throwable.getClass().getSuperclass().getSimpleName(), AbstractException.class.getSimpleName())) {
+        if (Objects.equals(throwable.getClass().getSuperclass().getSimpleName(), BaseException.class.getSimpleName())) {
             String errorCode = ReflectUtil.getFieldValue(throwable, "errorCode").toString();
             String errorMessage = ReflectUtil.getFieldValue(throwable, "errorMessage").toString();
             return Results.failure(errorCode, errorMessage);

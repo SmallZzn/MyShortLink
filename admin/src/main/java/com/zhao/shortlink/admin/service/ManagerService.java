@@ -5,7 +5,7 @@ package com.zhao.shortlink.admin.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.zhao.shortlink.admin.dao.entity.ManagerDO;
-import com.zhao.shortlink.admin.dto.req.ManagerDTO;
+import com.zhao.shortlink.admin.dto.req.ManagerReqDTO;
 import com.zhao.shortlink.admin.dto.resp.ManagerLoginRespDTO;
 
 /**
@@ -57,14 +57,14 @@ public interface ManagerService extends IService<ManagerDO> {
      * @param manageDTO 查询条件
      * @return 管理员分页列表
      */
-    IPage<ManagerDO> pageManagerList(ManagerDTO manageDTO);
+    IPage<ManagerDO> pageManagerList(ManagerReqDTO manageDTO);
 
     /**
      * 登录
      * @param manageDTO
      * @return
      */
-    ManagerLoginRespDTO login(ManagerDTO manageDTO);
+    ManagerLoginRespDTO login(ManagerReqDTO manageDTO);
 
     /**
      * 检查是否登录

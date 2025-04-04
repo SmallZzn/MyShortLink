@@ -46,7 +46,7 @@
     </select>
 
     <!-- 分页查询短链接 -->
-    <select id="getManagerShortLink" parameterType="com.zhao.shortlink.project.dto.req.ManagerToUserDTO"
+    <select id="getManagerShortLink" parameterType="com.zhao.shortlink.project.dto.req.ManagerToReqDTO"
             resultType="com.zhao.shortlink.project.dao.entity.ShortLinkDO">
         SELECT t.*,
         COALESCE(s.today_pv, 0) AS todayPv,

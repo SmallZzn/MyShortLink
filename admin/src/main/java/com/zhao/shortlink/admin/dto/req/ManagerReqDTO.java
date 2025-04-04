@@ -8,7 +8,7 @@ import lombok.Data;
  * @DateTime: 2025/3/23 13:06
  */
 @Data
-public class ManagerDTO extends ManagerDO {
+public class ManagerReqDTO extends ManagerDO {
     /**
      * 当前页
      */

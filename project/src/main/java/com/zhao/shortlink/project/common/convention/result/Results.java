@@ -3,7 +3,7 @@
 package com.zhao.shortlink.project.common.convention.result;
 
 import com.zhao.shortlink.project.common.convention.errorcode.BaseErrorCode;
-import com.zhao.shortlink.project.common.convention.exception.AbstractException;
+import com.zhao.shortlink.project.common.convention.exception.BaseException;
 
 import java.util.Optional;
 
@@ -40,12 +40,12 @@ public final class Results {
     }
 
     /**
-     * 通过 {@link AbstractException} 构建失败响应
+     * 构建失败响应
      */
-    public static Result<Void> failure(AbstractException abstractException) {
-        String errorCode = Optional.ofNullable(abstractException.getErrorCode())
+    public static Result<Void> failure(BaseException baseException) {
+        String errorCode = Optional.ofNullable(baseException.getErrorCode())
                 .orElse(BaseErrorCode.SERVICE_ERROR.code());
-        String errorMessage = Optional.ofNullable(abstractException.getErrorMessage())
+        String errorMessage = Optional.ofNullable(baseException.getErrorMessage())
                 .orElse(BaseErrorCode.SERVICE_ERROR.message());
         return new Result<Void>()
                 .setCode(errorCode)
@@ -53,7 +53,7 @@ public final class Results {
     }
 
     /**
-     * 通过 errorCode、errorMessage 构建失败响应
+     * 构建失败响应
      */
     public static Result<Void> failure(String errorCode, String errorMessage) {
         return new Result<Void>()

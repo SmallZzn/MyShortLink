@@ -3,9 +3,9 @@ package com.zhao.shortlink.admin.remote;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zhao.shortlink.admin.common.convention.result.Result;
 import com.zhao.shortlink.admin.dao.entity.BlackListDO;
-import com.zhao.shortlink.admin.dto.req.ManagerToUserDTO;
+import com.zhao.shortlink.admin.dto.req.ManagerToUserReqDTO;
 import com.zhao.shortlink.admin.dto.req.RecycleBinRecoverReqDTO;
-import com.zhao.shortlink.admin.dto.req.RecycleBinRemoveReqDTO;
+import com.zhao.shortlink.admin.dto.req.RecycleBinRemoveDTO;
 import com.zhao.shortlink.admin.dto.req.RecycleBinSaveReqDTO;
 import com.zhao.shortlink.admin.remote.dto.req.*;
 import com.zhao.shortlink.admin.remote.dto.resp.*;
@@ -29,15 +29,6 @@ public interface ShortLinkActualRemoteService {
      */
     @PostMapping("/short-link/v1/create")
     Result<ShortLinkCreateRespDTO> createShortLink(@RequestBody ShortLinkCreateReqDTO requestParam);
-
-    /**
-     * 批量创建短链接
-     *
-     * @param requestParam 批量创建短链接请求参数
-     * @return 短链接批量创建响应
-     */
-    @PostMapping("/short-link/v1/create/batch")
-    Result<ShortLinkBatchCreateRespDTO> batchCreateShortLink(@RequestBody ShortLinkBatchCreateReqDTO requestParam);
 
     /**
      * 修改短链接
@@ -68,7 +59,7 @@ public interface ShortLinkActualRemoteService {
      * @return 查询短链接响应
      */
     @PostMapping("/short-link/v1/getManagerShortLink")
-    Result<Page<ShortLinkPageRespDTO>> getManagerShortLink(@RequestBody ManagerToUserDTO managerToUserDTO);
+    Result<Page<ShortLinkPageRespDTO>> getManagerShortLink(@RequestBody ManagerToUserReqDTO managerToUserDTO);
 
     /**
      * 查询分组短链接总量
@@ -123,7 +114,7 @@ public interface ShortLinkActualRemoteService {
      * @param requestParam 短链接移除请求参数
      */
     @PostMapping("/short-link/v1/recycle-bin/remove")
-    void removeRecycleBin(@RequestBody RecycleBinRemoveReqDTO requestParam);
+    void removeRecycleBin(@RequestBody RecycleBinRemoveDTO requestParam);
 
 
     /**

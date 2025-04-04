@@ -9,7 +9,7 @@ import com.zhao.shortlink.project.common.convention.errorcode.IErrorCode;
  * 远程服务调用异常
  * 小赵
  */
-public class RemoteException extends AbstractException {
+public class RemoteException extends BaseException {
 
     public RemoteException(String message) {
         this(message, null, BaseErrorCode.REMOTE_ERROR);
@@ -26,8 +26,8 @@ public class RemoteException extends AbstractException {
     @Override
     public String toString() {
         return "RemoteException{" +
-                "code='" + errorCode + "'," +
-                "message='" + errorMessage + "'" +
+                "code = '" + errorCode + "'," +
+                "message = '" + errorMessage + "'" +
                 '}';
     }
 }

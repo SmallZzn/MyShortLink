@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.zhao.shortlink.admin.common.convention.result.Result;
 import com.zhao.shortlink.admin.common.convention.result.Results;
 import com.zhao.shortlink.admin.dao.entity.ManagerDO;
-import com.zhao.shortlink.admin.dto.req.ManagerDTO;
+import com.zhao.shortlink.admin.dto.req.ManagerReqDTO;
 import com.zhao.shortlink.admin.dto.resp.ManagerLoginRespDTO;
 import com.zhao.shortlink.admin.service.ManagerService;
 import lombok.RequiredArgsConstructor;
@@ -69,7 +69,7 @@ public class ManagerController {
      * 分页查询管理员列表
      */
     @GetMapping("/short-link/admin/v1/manager/page")
-    public Result<IPage<ManagerDO>> pageManagerList(ManagerDTO manageDTO) {
+    public Result<IPage<ManagerDO>> pageManagerList(ManagerReqDTO manageDTO) {
         return Results.success(managerService.pageManagerList(manageDTO));
     }
 
@@ -77,7 +77,7 @@ public class ManagerController {
      * 登录
      */
     @PostMapping("/short-link/admin/v1/manager/login")
-    public Result<ManagerLoginRespDTO> login(@RequestBody ManagerDTO manageDTO) {
+    public Result<ManagerLoginRespDTO> login(@RequestBody ManagerReqDTO manageDTO) {
         return Results.success(managerService.login(manageDTO));
     }
 

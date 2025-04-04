@@ -15,18 +15,16 @@ import com.zhao.shortlink.admin.common.convention.exception.ServiceException;
 import com.zhao.shortlink.admin.common.enums.UserErrorCodeEnum;
 import com.zhao.shortlink.admin.dao.entity.UserDO;
 import com.zhao.shortlink.admin.dao.mapper.UserMapper;
-import com.zhao.shortlink.admin.dto.req.UserDTO;
 import com.zhao.shortlink.admin.dto.req.UserLoginReqDTO;
 import com.zhao.shortlink.admin.dto.req.UserRegisterReqDTO;
+import com.zhao.shortlink.admin.dto.req.UserReqDTO;
 import com.zhao.shortlink.admin.dto.req.UserUpdateReqDTO;
 import com.zhao.shortlink.admin.dto.resp.UserLoginRespDTO;
 import com.zhao.shortlink.admin.dto.resp.UserRespDTO;
 import com.zhao.shortlink.admin.service.GroupService;
-import com.zhao.shortlink.admin.service.ManagerService;
 import com.zhao.shortlink.admin.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.redisson.api.RBloomFilter;
-import org.redisson.api.RedissonClient;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -47,10 +45,8 @@ import static com.zhao.shortlink.admin.common.enums.UserErrorCodeEnum.*;
 public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements UserService {
 
     private final RBloomFilter<String> userRegisterCachePenetrationBloomFilter;
-    private final RedissonClient redissonClient;
     private final StringRedisTemplate stringRedisTemplate;
     private final GroupService groupService;
-    private final ManagerService managerService;
 
     @Override
     public UserRespDTO getUserByUsername(String username) {
@@ -75,10 +71,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
         if (!hasUsername(requestParam.getUsername())) {
             throw new ClientException(USER_NAME_EXIST);
         }
-//        RLock lock = redissonClient.getLock(LOCK_USER_REGISTER_KEY + requestParam.getUsername());
-//        if (lock.tryLock()) {
-//            throw new ClientException(USER_NAME_EXIST);
-//        }
         try {
             int inserted = baseMapper.insert(BeanUtil.toBean(requestParam, UserDO.class));
             if (inserted < 1) {
@@ -89,17 +81,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
         } catch (DuplicateKeyException ex) {
             throw new ClientException(USER_EXIST);
         }
-//        finally {
-//            lock.unlock();
-//        }
     }
 
     @Override
     public void update(UserUpdateReqDTO requestParam) {
-        // 验证当前用户名是否为登录用户
-//        if (!Objects.equals(requestParam.getUsername(), UserContext.getUsername())) {
-//            throw new ClientException(USER_EXIST);
-//        }
         LambdaUpdateWrapper<UserDO> updateWrapper = Wrappers.lambdaUpdate(UserDO.class)
                 .eq(UserDO::getUsername, requestParam.getUsername());
         baseMapper.update(BeanUtil.toBean(requestParam, UserDO.class), updateWrapper);
@@ -113,25 +98,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
                 .eq(UserDO::getDelFlag, 0);
         UserDO userDO = baseMapper.selectOne(queryWrapper);
         if (userDO == null) {
-            throw new ClientException("用户不存在");
+            throw new ClientException("该用户不存在");
         }
-        // 允许用户多端登录
         Map<Object, Object> hasLoginMap = stringRedisTemplate.opsForHash().entries(USER_LOGIN_KEY + requestParam.getUsername());
         if (CollUtil.isNotEmpty(hasLoginMap)) {
             stringRedisTemplate.expire(USER_LOGIN_KEY + requestParam.getUsername(), 30L, TimeUnit.MINUTES);
             String token = hasLoginMap.keySet().stream()
                     .findFirst()
                     .map(Object::toString)
-                    .orElseThrow(() -> new ClientException("用户登录错误"));
+                    .orElseThrow(() -> new ClientException("用户登录出现错误"));
             return new UserLoginRespDTO(token);
         }
-        /**
-         * Hash
-         * Key：login_用户名
-         * Value：
-         *  Key：token标识
-         *  Val：JSON 字符串（用户信息）
-         */
         String uuid = UUID.randomUUID().toString();
         stringRedisTemplate.opsForHash().put(USER_LOGIN_KEY + requestParam.getUsername(), uuid, JSON.toJSONString(userDO));
         stringRedisTemplate.expire(USER_LOGIN_KEY + requestParam.getUsername(), 30L, TimeUnit.MINUTES);
@@ -149,11 +126,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
             stringRedisTemplate.delete(USER_LOGIN_KEY + username);
             return;
         }
-        throw new ClientException("用户Token不存在或用户未登录");
+        throw new ClientException("退出登录出现错误");
     }
 
     @Override
-    public Boolean checkPassword(UserDTO userDTO) {
+    public Boolean checkPassword(UserReqDTO userDTO) {
         LambdaQueryWrapper<UserDO> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(UserDO::getUsername, userDTO.getUsername());
         UserDO userDO = baseMapper.selectOne(queryWrapper);

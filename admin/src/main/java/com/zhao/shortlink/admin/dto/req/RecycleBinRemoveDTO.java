@@ -9,7 +9,7 @@ import lombok.Data;
  * 小赵
  */
 @Data
-public class RecycleBinRemoveReqDTO {
+public class RecycleBinRemoveDTO {
 
     /**
      * 分组标识

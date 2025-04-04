@@ -12,8 +12,8 @@ spring:
       host: 192.168.200.131
       port: 6380
       password: zzn199636520
-#      host: 127.0.0.1
-#      port: 6379
+  #      host: 127.0.0.1
+  #      port: 6379
   mvc:
     view:
       prefix: /templates/
@@ -27,7 +27,6 @@ short-link:
   domain:
     default: zhaozn:8001
 
-
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
@@ -35,7 +34,7 @@ mybatis-plus:
 
 rocketmq:
   name-server: 192.168.200.131:9876
-#  name-server: 127.0.0.1:9876
+  #  name-server: 127.0.0.1:9876
   producer:
     group: short-link_project-service_stats-save_pg
     topic: short-link_project-service_topic

@@ -4,8 +4,8 @@ package com.zhao.shortlink.admin.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.zhao.shortlink.admin.dao.entity.UserDO;
-import com.zhao.shortlink.admin.dto.req.UserDTO;
 import com.zhao.shortlink.admin.dto.req.UserLoginReqDTO;
+import com.zhao.shortlink.admin.dto.req.UserReqDTO;
 import com.zhao.shortlink.admin.dto.req.UserRegisterReqDTO;
 import com.zhao.shortlink.admin.dto.req.UserUpdateReqDTO;
 import com.zhao.shortlink.admin.dto.resp.UserLoginRespDTO;
@@ -79,7 +79,7 @@ public interface UserService extends IService<UserDO> {
      * @param userDTO
      * @return
      */
-    Boolean checkPassword(UserDTO userDTO);
+    Boolean checkPassword(UserReqDTO userDTO);
 
     /**
      * 今日新增用户数

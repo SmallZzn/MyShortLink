@@ -16,7 +16,7 @@ import com.zhao.shortlink.admin.common.convention.exception.ClientException;
 import com.zhao.shortlink.admin.common.convention.exception.ServiceException;
 import com.zhao.shortlink.admin.dao.entity.ManagerDO;
 import com.zhao.shortlink.admin.dao.mapper.ManagerMapper;
-import com.zhao.shortlink.admin.dto.req.ManagerDTO;
+import com.zhao.shortlink.admin.dto.req.ManagerReqDTO;
 import com.zhao.shortlink.admin.dto.resp.ManagerLoginRespDTO;
 import com.zhao.shortlink.admin.service.ManagerService;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +45,7 @@ public class ManagerServiceImpl extends ServiceImpl<ManagerMapper, ManagerDO> im
                 .eq(ManagerDO::getUsername, username);
         ManagerDO managerDO = baseMapper.selectOne(queryWrapper);
         if (managerDO == null) {
-            throw new ServiceException("管理员不存在");
+            throw new ServiceException("该管理员不存在");
         }
         return managerDO;
     }
@@ -61,7 +61,7 @@ public class ManagerServiceImpl extends ServiceImpl<ManagerMapper, ManagerDO> im
     @Override
     public void createManager(ManagerDO manager) {
         if (hasUsername(manager.getUsername())) {
-            throw new ClientException("用户名已存在");
+            throw new ClientException("该用户名已存在");
         }
         baseMapper.insert(manager);
     }
@@ -81,7 +81,7 @@ public class ManagerServiceImpl extends ServiceImpl<ManagerMapper, ManagerDO> im
     }
 
     @Override
-    public IPage<ManagerDO> pageManagerList(ManagerDTO manageDTO) {
+    public IPage<ManagerDO> pageManagerList(ManagerReqDTO manageDTO) {
         LambdaQueryWrapper<ManagerDO> queryWrapper = Wrappers.lambdaQuery(ManagerDO.class)
                 .like(StrUtil.isNotBlank(manageDTO.getUsername()), ManagerDO::getUsername, manageDTO.getUsername())
                 .eq(manageDTO.getDelFlag() != null, ManagerDO::getDelFlag, manageDTO.getDelFlag())
@@ -94,32 +94,24 @@ public class ManagerServiceImpl extends ServiceImpl<ManagerMapper, ManagerDO> im
     }
 
     @Override
-    public ManagerLoginRespDTO login(ManagerDTO manageDTO) {
+    public ManagerLoginRespDTO login(ManagerReqDTO manageDTO) {
         LambdaQueryWrapper<ManagerDO> queryWrapper = Wrappers.lambdaQuery(ManagerDO.class)
                 .eq(ManagerDO::getUsername, manageDTO.getUsername())
                 .eq(ManagerDO::getPassword, manageDTO.getPassword())
                 .eq(ManagerDO::getDelFlag, 0);
         ManagerDO managerDO = baseMapper.selectOne(queryWrapper);
         if (managerDO == null) {
-            throw new ClientException("管理员不存在");
+            throw new ClientException("该管理员不存在");
         }
-        // 允许用户多端登录
         Map<Object, Object> hasLoginMap = stringRedisTemplate.opsForHash().entries(MANAGER_LOGIN_KEY + manageDTO.getUsername());
         if (CollUtil.isNotEmpty(hasLoginMap)) {
             stringRedisTemplate.expire(USER_LOGIN_KEY + manageDTO.getUsername(), 30L, TimeUnit.MINUTES);
             String token = hasLoginMap.keySet().stream()
                     .findFirst()
                     .map(Object::toString)
-                    .orElseThrow(() -> new ClientException("管理员登录错误"));
+                    .orElseThrow(() -> new ClientException("管理员登录出现错误"));
             return new ManagerLoginRespDTO(token);
         }
-        /**
-         * Hash
-         * Key：login_用户名
-         * Value：
-         *  Key：token标识
-         *  Val：JSON 字符串（用户信息）
-         */
         String uuid = UUID.randomUUID().toString();
         stringRedisTemplate.opsForHash().put(MANAGER_LOGIN_KEY + manageDTO.getUsername(), uuid, JSON.toJSONString(managerDO));
         stringRedisTemplate.expire(MANAGER_LOGIN_KEY + manageDTO.getUsername(), 30L, TimeUnit.MINUTES);

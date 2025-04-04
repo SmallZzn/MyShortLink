@@ -38,7 +38,7 @@ public class RecycleBinServiceImpl implements RecycleBinService {
                 .eq(GroupDO::getDelFlag, 0);
         List<GroupDO> groupDOList = groupMapper.selectList(queryWrapper);
         if (CollUtil.isEmpty(groupDOList)) {
-            throw new ServiceException("用户无分组信息");
+            throw new ServiceException("用户暂无分组信息");
         }
         requestParam.setGidList(groupDOList.stream().map(GroupDO::getGid).toList());
         return shortLinkActualRemoteService.pageRecycleBinShortLink(requestParam.getGidList(), requestParam.getCurrent(), requestParam.getSize());

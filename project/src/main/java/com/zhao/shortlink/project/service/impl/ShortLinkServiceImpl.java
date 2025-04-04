@@ -148,35 +148,6 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
                 .build();
     }
 
-    @Override
-    public ShortLinkBatchCreateRespDTO batchCreateShortLink(ShortLinkBatchCreateReqDTO requestParam) {
-        // 获取要创建的批量原始短链接
-        List<String> originUrls = requestParam.getOriginUrls();
-        // 获取要创建的批量原始短链接描述
-        List<String> describes = requestParam.getDescribes();
-        List<ShortLinkBaseInfoRespDTO> result = new ArrayList<>();
-        // 循环调用创建单个短链接的方法
-        for (int i = 0; i < originUrls.size(); i++) {
-            ShortLinkCreateReqDTO shortLinkCreateReqDTO = BeanUtil.toBean(requestParam, ShortLinkCreateReqDTO.class);
-            shortLinkCreateReqDTO.setOriginUrl(originUrls.get(i));
-            shortLinkCreateReqDTO.setDescribe(describes.get(i));
-            try {
-                ShortLinkCreateRespDTO shortLink = createShortLink(shortLinkCreateReqDTO);
-                ShortLinkBaseInfoRespDTO linkBaseInfoRespDTO = ShortLinkBaseInfoRespDTO.builder()
-                        .fullShortUrl(shortLink.getFullShortUrl())
-                        .originUrl(shortLink.getOriginUrl())
-                        .describe(describes.get(i))
-                        .build();
-                result.add(linkBaseInfoRespDTO);
-            } catch (Throwable ex) {
-                log.error("批量创建短链接失败，原始参数：{}", originUrls.get(i));
-            }
-        }
-        return ShortLinkBatchCreateRespDTO.builder()
-                .total(result.size())
-                .baseLinkInfos(result)
-                .build();
-    }
 
     //由于代码涉及到先删除再修改，所以需要使用事务
     @Transactional(rollbackFor = Exception.class)
@@ -195,7 +166,7 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
         ShortLinkDO hasShortLinkDO = baseMapper.selectOne(queryWrapper);
         //判断数据是否存在，这里主要是为了减少下面if (Objects.equals(hasShortLinkDO.getGid(), requestParam.getGid()))的层级
         if (hasShortLinkDO == null) {
-            throw new ClientException("短链接记录不存在");
+            throw new ClientException("该短链接记录不存在");
         }
         //判断短链接的gid是否修改
         if (Objects.equals(hasShortLinkDO.getGid(), requestParam.getGid())) {
@@ -223,9 +194,6 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
             //获取写锁
             RReadWriteLock readWriteLock = redissonClient.getReadWriteLock(String.format(LOCK_GID_UPDATE_KEY, requestParam.getFullShortUrl()));
             RLock rLock = readWriteLock.writeLock();
-            /*if (!rLock.tryLock()) {
-                throw new ServiceException("短链接正在被访问，请稍后再试...");
-            }*/
             rLock.lock();
             try {
                 //gid被修改了
@@ -366,7 +334,7 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
     }
 
     @Override
-    public IPage<ShortLinkPageRespDTO> getManagerShortLink(ManagerToUserDTO requestParam) {
+    public IPage<ShortLinkPageRespDTO> getManagerShortLink(ManagerToReqDTO requestParam) {
         IPage<ShortLinkDO> resultPage = baseMapper.getManagerShortLink(requestParam);
         return resultPage.convert(each -> {
             ShortLinkPageRespDTO result = BeanUtil.toBean(each, ShortLinkPageRespDTO.class);
@@ -550,7 +518,7 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
         //如果生成的短链接重复，则会重新生成，最大次数为10次
         while (true) {
             if (customGenerateCount > 10) {
-                throw new ServiceException("短链接频繁生成，请稍后再试");
+                throw new ServiceException("该短链接频繁生成，请稍后再试");
             }
             //如果一直使用同一个originUrl去生成短链接，生成的结果是不变的，所以需要对originUrl做一些改变
             String originUrl = requestParam.getOriginUrl();
@@ -589,7 +557,7 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
         List<String> collect = blackListDOS.stream().map(BlackListDO::getBlackName).toList();
         String domain = LinkUtil.extractDomain(originUrl);
         if (StrUtil.isBlank(domain)) {
-            throw new ClientException("跳转链接填写错误");
+            throw new ClientException("跳转链接填写有误");
         }
         if (collect.contains(domain)) {
             throw new ClientException("改域名为黑名单域名，禁止使用");

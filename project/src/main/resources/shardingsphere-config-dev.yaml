@@ -29,7 +29,7 @@ rules:
           standard:
             shardingColumn: gid
             shardingAlgorithmName: link_stats_today_hash_mod
-    bindingTables: #绑定表，防止出现笛卡尔积，需要使用相同的分片键将两个表绑定
+    bindingTables:
       - t_link, t_link_stats_today
     shardingAlgorithms:
       link_table_hash_mod:

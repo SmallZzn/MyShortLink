@@ -1,5 +1,3 @@
-
-
 package com.zhao.shortlink.project.common.convention.exception;
 
 import com.zhao.shortlink.project.common.convention.errorcode.BaseErrorCode;
@@ -9,7 +7,7 @@ import com.zhao.shortlink.project.common.convention.errorcode.IErrorCode;
  * 客户端异常
  * 小赵
  */
-public class ClientException extends AbstractException {
+public class ClientException extends BaseException {
 
     public ClientException(IErrorCode errorCode) {
         this(null, null, errorCode);
@@ -30,8 +28,8 @@ public class ClientException extends AbstractException {
     @Override
     public String toString() {
         return "ClientException{" +
-                "code='" + errorCode + "'," +
-                "message='" + errorMessage + "'" +
+                "code = '" + errorCode + "'," +
+                "message = '" + errorMessage + "'" +
                 '}';
     }
 }

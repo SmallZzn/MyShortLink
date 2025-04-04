@@ -1,5 +1,3 @@
-
-
 package com.zhao.shortlink.project.common.database;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;

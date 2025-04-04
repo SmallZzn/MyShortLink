@@ -11,7 +11,7 @@ import java.util.List;
  * @DateTime: 2025/3/23 16:39
  */
 @Data
-public class ManagerToUserDTO extends Page<ShortLinkDO> {
+public class ManagerToUserReqDTO extends Page<ShortLinkDO> {
 
     /**
      * ID

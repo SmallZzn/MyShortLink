@@ -17,13 +17,13 @@ import java.util.Optional;
  * @see RemoteException
  */
 @Getter
-public abstract class AbstractException extends RuntimeException {
+public abstract class BaseException extends RuntimeException {
 
     public final String errorCode;
 
     public final String errorMessage;
 
-    public AbstractException(String message, Throwable throwable, IErrorCode errorCode) {
+    public BaseException(String message, Throwable throwable, IErrorCode errorCode) {
         super(message, throwable);
         this.errorCode = errorCode.code();
         this.errorMessage = Optional.ofNullable(StringUtils.hasLength(message) ? message : null).orElse(errorCode.message());

@@ -9,8 +9,8 @@ import com.zhao.shortlink.admin.common.convention.result.Result;
 import com.zhao.shortlink.admin.common.convention.result.Results;
 import com.zhao.shortlink.admin.dao.entity.ManagerToUserDO;
 import com.zhao.shortlink.admin.dao.entity.UserDO;
-import com.zhao.shortlink.admin.dto.req.ManagerToUserDTO;
-import com.zhao.shortlink.admin.dto.req.UserDTO;
+import com.zhao.shortlink.admin.dto.req.ManagerToUserReqDTO;
+import com.zhao.shortlink.admin.dto.req.UserReqDTO;
 import com.zhao.shortlink.admin.dto.resp.ManagerToUserRespDTO;
 import com.zhao.shortlink.admin.remote.dto.req.ShortLinkStatsAccessRecordReqDTO;
 import com.zhao.shortlink.admin.remote.dto.req.ShortLinkStatsReqDTO;
@@ -90,7 +90,7 @@ public class ManagerToUserController {
      * 查询分配列表
      */
     @PostMapping("/short-link/admin/v1/manager-to-user/getAssignedList")
-    public Result<ManagerToUserRespDTO> getAssignedList(@RequestBody ManagerToUserDTO managerToUserDTO) {
+    public Result<ManagerToUserRespDTO> getAssignedList(@RequestBody ManagerToUserReqDTO managerToUserDTO) {
         return Results.success(managerToUserService.getAssignedList(managerToUserDTO));
     }
 
@@ -98,7 +98,7 @@ public class ManagerToUserController {
      * 分页查询管理的用户列表
      */
     @GetMapping("/short-link/admin/v1/manager-to-user/pageUserList")
-    public Result<IPage<UserDO>> pageUserList(UserDTO userDTO) {
+    public Result<IPage<UserDO>> pageUserList(UserReqDTO userDTO) {
         return Results.success(managerToUserService.pageUserList(userDTO));
     }
 
@@ -106,7 +106,7 @@ public class ManagerToUserController {
      * 查看管理员管理的短链接
      */
     @PostMapping("/short-link/v1/manager-to-user/getManagerShortLink")
-    public Result<Page<ShortLinkPageRespDTO>> getManagerShortLink(@RequestBody ManagerToUserDTO managerToUserDTO) {
+    public Result<Page<ShortLinkPageRespDTO>> getManagerShortLink(@RequestBody ManagerToUserReqDTO managerToUserDTO) {
         return managerToUserService.getManagerShortLink(managerToUserDTO);
     }
 

@@ -11,7 +11,7 @@ import java.util.Optional;
  * 服务端异常
  * 小赵
  */
-public class ServiceException extends AbstractException {
+public class ServiceException extends BaseException {
 
     public ServiceException(String message) {
         this(message, null, BaseErrorCode.SERVICE_ERROR);
@@ -32,8 +32,8 @@ public class ServiceException extends AbstractException {
     @Override
     public String toString() {
         return "ServiceException{" +
-                "code='" + errorCode + "'," +
-                "message='" + errorMessage + "'" +
+                "code = '" + errorCode + "'," +
+                "message = '" + errorMessage + "'" +
                 '}';
     }
 }

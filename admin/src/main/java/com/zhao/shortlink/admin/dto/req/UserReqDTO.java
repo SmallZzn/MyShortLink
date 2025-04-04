@@ -7,7 +7,7 @@ import lombok.Data;
  * @DateTime: 2025/3/19 23:48
  */
 @Data
-public class UserDTO {
+public class UserReqDTO {
 
     /**
      * id

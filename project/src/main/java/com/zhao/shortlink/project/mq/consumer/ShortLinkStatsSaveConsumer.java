@@ -71,7 +71,7 @@ public class ShortLinkStatsSaveConsumer implements RocketMQListener<Map<String, 
             if (messageQueueIdempotentHandler.isAccomplish(keys)) {
                 return;
             }
-            throw new ServiceException("消息未完成流程，需要消息队列重试");
+            throw new ServiceException("消息还未完成流程，需要消息队列重试");
         }
         try {
             // 执行任务

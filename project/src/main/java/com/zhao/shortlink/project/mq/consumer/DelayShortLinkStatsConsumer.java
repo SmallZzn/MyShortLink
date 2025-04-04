@@ -53,7 +53,7 @@ public class DelayShortLinkStatsConsumer implements InitializingBean {
                                     if (messageQueueIdempotentHandler.isAccomplish(statsRecord.getKeys())) {
                                         return;
                                     }
-                                    throw new ServiceException("消息未完成流程，需要消息队列重试");
+                                    throw new ServiceException("消息还未完成流程，需要消息队列重试");
                                 }
                                 try {
                                     shortLinkService.shortLinkStats(null, null, statsRecord);

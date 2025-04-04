@@ -1,5 +1,3 @@
-
-
 package com.zhao.shortlink.admin.controller;
 
 import com.zhao.shortlink.admin.common.convention.result.Result;

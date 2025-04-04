@@ -6,8 +6,10 @@ import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.zhao.shortlink.project.common.convention.result.Result;
 import com.zhao.shortlink.project.common.convention.result.Results;
-import com.zhao.shortlink.project.dto.req.*;
-import com.zhao.shortlink.project.dto.resp.ShortLinkBatchCreateRespDTO;
+import com.zhao.shortlink.project.dto.req.ManagerToReqDTO;
+import com.zhao.shortlink.project.dto.req.ShortLinkCreateReqDTO;
+import com.zhao.shortlink.project.dto.req.ShortLinkPageReqDTO;
+import com.zhao.shortlink.project.dto.req.ShortLinkUpdateReqDTO;
 import com.zhao.shortlink.project.dto.resp.ShortLinkCreateRespDTO;
 import com.zhao.shortlink.project.dto.resp.ShortLinkGroupCountQueryRespDTO;
 import com.zhao.shortlink.project.dto.resp.ShortLinkPageRespDTO;
@@ -52,14 +54,6 @@ public class ShortLinkController {
     }
 
     /**
-     * 批量创建短链接
-     */
-    @PostMapping("/short-link/v1/create/batch")
-    public Result<ShortLinkBatchCreateRespDTO> batchCreateShortLink(@RequestBody ShortLinkBatchCreateReqDTO requestParam) {
-        return Results.success(shortLinkService.batchCreateShortLink(requestParam));
-    }
-
-    /**
      * 修改短链接
      */
     @PostMapping("/short-link/v1/update")
@@ -78,11 +72,9 @@ public class ShortLinkController {
 
     /**
      * 查询管理员管理的短链接
-     * @param requestParam
-     * @return
      */
     @PostMapping("/short-link/v1/getManagerShortLink")
-    public Result<IPage<ShortLinkPageRespDTO>> getManagerShortLink(@RequestBody ManagerToUserDTO requestParam) {
+    public Result<IPage<ShortLinkPageRespDTO>> getManagerShortLink(@RequestBody ManagerToReqDTO requestParam) {
         return Results.success(shortLinkService.getManagerShortLink(requestParam));
     }
 

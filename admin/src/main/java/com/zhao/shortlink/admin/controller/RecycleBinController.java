@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zhao.shortlink.admin.common.convention.result.Result;
 import com.zhao.shortlink.admin.common.convention.result.Results;
 import com.zhao.shortlink.admin.dto.req.RecycleBinRecoverReqDTO;
-import com.zhao.shortlink.admin.dto.req.RecycleBinRemoveReqDTO;
+import com.zhao.shortlink.admin.dto.req.RecycleBinRemoveDTO;
 import com.zhao.shortlink.admin.dto.req.RecycleBinSaveReqDTO;
 import com.zhao.shortlink.admin.remote.ShortLinkActualRemoteService;
 import com.zhao.shortlink.admin.remote.dto.req.ShortLinkRecycleBinPageReqDTO;
@@ -59,7 +59,7 @@ public class RecycleBinController {
      * 移除短链接
      */
     @PostMapping("/short-link/admin/v1/recycle-bin/remove")
-    public Result<Void> removeRecycleBin(@RequestBody RecycleBinRemoveReqDTO requestParam) {
+    public Result<Void> removeRecycleBin(@RequestBody RecycleBinRemoveDTO requestParam) {
         shortLinkActualRemoteService.removeRecycleBin(requestParam);
         return Results.success();
     }
