@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: short-link-admin
+    name: short-url-admin
   datasource:
     driver-class-name: org.apache.shardingsphere.driver.ShardingSphereDriver
     url: jdbc:shardingsphere:classpath:shardingsphere-config-${database.env:dev}.yaml
@@ -19,7 +19,7 @@ spring:
       discovery:
         server-addr: 127.0.0.1:8848
 
-short-link:
+short-url:
   group:
     max-count: 20
   flow-limit:

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zhao.shortlink.project.dao.mapper.ShortLinkMapper">
+<mapper namespace="com.zhao.shorturl.project.dao.mapper.ShortLinkMapper">
     <!-- 分页查询短链接 -->
-    <select id="pageLink" parameterType="com.zhao.shortlink.project.dto.req.ShortLinkPageReqDTO"
-            resultType="com.zhao.shortlink.project.dao.entity.ShortLinkDO">
+    <select id="pageLink" parameterType="com.zhao.shorturl.project.dto.req.ShortLinkPageReqDTO"
+            resultType="com.zhao.shorturl.project.dao.entity.ShortLinkDO">
         SELECT t.*,
         COALESCE(s.today_pv, 0) AS todayPv,
         COALESCE(s.today_uv, 0) AS todayUv,
@@ -46,8 +46,8 @@
     </select>
 
     <!-- 分页查询短链接 -->
-    <select id="getManagerShortLink" parameterType="com.zhao.shortlink.project.dto.req.ManagerToReqDTO"
-            resultType="com.zhao.shortlink.project.dao.entity.ShortLinkDO">
+    <select id="getManagerShortLink" parameterType="com.zhao.shorturl.project.dto.req.ManagerToReqDTO"
+            resultType="com.zhao.shorturl.project.dao.entity.ShortLinkDO">
         SELECT t.*,
         COALESCE(s.today_pv, 0) AS todayPv,
         COALESCE(s.today_uv, 0) AS todayUv,

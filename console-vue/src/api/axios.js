@@ -6,7 +6,7 @@ import { isNotEmpty } from '@/utils/plugins.js'
 import { useRouter } from 'vue-router'
 const router = useRouter()
 // const baseURL = '/resourcesharing/organizational'
-const baseURL = '/short-link/admin/v1'
+const baseURL = '/short-url/admin/v1'
 // 创建实例
 const http = axios.create({
   // api 代理为服务器请求地址

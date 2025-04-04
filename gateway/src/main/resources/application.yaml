@@ -2,7 +2,7 @@ server:
   port: 8000
 spring:
   application:
-    name: short-link-gateway
+    name: short-url-gateway
   profiles:
     active: aggregation
     # active: dev

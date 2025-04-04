@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: short-link-project
+    name: short-url-project
   datasource:
     driver-class-name: org.apache.shardingsphere.driver.ShardingSphereDriver
     url: jdbc:shardingsphere:classpath:shardingsphere-config-${database.env:dev}.yaml
@@ -23,7 +23,7 @@ spring:
       discovery:
         server-addr: 127.0.0.1:8848
 
-short-link:
+short-url:
   domain:
     default: zhaozn:8001
 
@@ -36,10 +36,10 @@ rocketmq:
   name-server: 192.168.200.131:9876
   #  name-server: 127.0.0.1:9876
   producer:
-    group: short-link_project-service_stats-save_pg
-    topic: short-link_project-service_topic
+    group: short-url_project-service_stats-save_pg
+    topic: short-url_project-service_topic
     send-message-timeout: 2000
     retry-times-when-send-failed: 1
     retry-times-when-send-async-failed: 1
   consumer:
-    group: short-link_project-service_stats-save_cg
+    group: short-url_project-service_stats-save_cg
